@@ -34,6 +34,7 @@ const keys = {
 };
 
 let enemyAnimationFrame = 0;
+let allImagesLoaded = false;
 
 function drawPlayer() {
     ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
@@ -69,9 +70,7 @@ function drawEnemies() {
             enemies.splice(index, 1);
         }
         const currentImage = enemyImages[Math.floor(enemyAnimationFrame) % enemyImages.length];
-        if (currentImage.complete) {
-            ctx.drawImage(currentImage, enemy.x, enemy.y, enemy.width, enemy.height);
-        }
+        ctx.drawImage(currentImage, enemy.x, enemy.y, enemy.width, enemy.height);
 
         if (enemy.shootCooldown <= 0) {
             enemy.bullets.push({
@@ -130,6 +129,7 @@ function update() {
 }
 
 function gameLoop() {
+    if (!allImagesLoaded) return; // Wait until all images are loaded
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     update();
@@ -141,6 +141,21 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
+function loadImages(images, callback) {
+    let loadedImages = 0;
+    images.forEach(image => {
+        image.onload = () => {
+            loadedImages++;
+            if (loadedImages === images.length) {
+                callback();
+            }
+        };
+        image.onerror = () => {
+            console.error(`Error loading image: ${image.src}`);
+        };
+    });
+}
+
 window.addEventListener('keydown', (e) => {
     if (e.code in keys) keys[e.code] = true;
 });
@@ -149,5 +164,8 @@ window.addEventListener('keyup', (e) => {
     if (e.code in keys) keys[e.code] = false;
 });
 
-setInterval(spawnEnemy, 1000);
-gameLoop();
+loadImages([...enemyImages, playerImage, needleImage], () => {
+    allImagesLoaded = true;
+    setInterval(spawnEnemy, 1000);
+    gameLoop();
+});
