@@ -74,10 +74,10 @@ function drawEnemies() {
         if (enemy.shootCooldown <= 0) {
             enemy.bullets.push({
                 x: enemy.x,
-                y: enemy.y + enemy.height / 2 - 37.5, // Adjust y-position for the bigger needle
+                y: enemy.y + enemy.height / 2 - 5,
                 width: 50,
                 height: 10,
-                speed: 1
+                speed: 0.6 // 5x slower
             });
             enemy.shootCooldown = 300; // 5 seconds at 60 FPS
         } else {
