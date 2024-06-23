@@ -20,7 +20,11 @@ const player = {
     width: 128,
     height: 128,
     speed: 5,
-    bullets: []
+    bullets: [],
+    health: 10,
+    isDead: false,
+    fadeValue: 1,
+    rotation: 0
 };
 
 const enemies = [];
@@ -36,7 +40,30 @@ const keys = {
 let allImagesLoaded = false;
 
 function drawPlayer() {
-    ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
+    if (player.isDead) {
+        ctx.save();
+        ctx.translate(player.x + player.width / 2, player.y + player.height / 2);
+        ctx.rotate(player.rotation * Math.PI / 180);
+        ctx.globalAlpha = player.fadeValue;
+        ctx.drawImage(playerImage, -player.width / 2, -player.height / 2, player.width, player.height);
+        ctx.restore();
+    } else {
+        ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
+    }
+}
+
+function drawHealthBar() {
+    const healthBarWidth = 200;
+    const healthBarHeight = 20;
+    const healthBarX = 20;
+    const healthBarY = 20;
+    const currentHealthWidth = healthBarWidth * (player.health / 10);
+
+    ctx.fillStyle = player.health > 3 ? 'green' : 'red';
+    ctx.fillRect(healthBarX, healthBarY, currentHealthWidth, healthBarHeight);
+
+    ctx.strokeStyle = 'black';
+    ctx.strokeRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
 }
 
 function drawBullets() {
@@ -123,18 +150,35 @@ function handleCollisions() {
                 bullet.y < player.y + player.height &&
                 bullet.y + bullet.height > player.y) {
                 enemy.bullets.splice(bulletIndex, 1);
-                // Handle player hit (e.g., reduce health or end game)
+                player.health--;
+                if (player.health <= 0 && !player.isDead) {
+                    player.isDead = true;
+                }
             }
         });
     });
 }
 
 function update() {
-    if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
-    if (keys.ArrowDown && player.y < canvas.height - player.height) player.y += player.speed;
-    if (keys.Space) {
-        player.bullets.push({ x: player.x + player.width - 5, y: player.y + player.height / 2 - 1, width: 10, height: 2, speed: 7 });
-        keys.Space = false; // Only shoot one bullet per key press
+    if (player.isDead) {
+        player.rotation += 10; // Spin
+        player.width *= 0.98; // Shrink
+        player.height *= 0.98; // Shrink
+        player.fadeValue -= 0.02; // Fade
+        if (player.fadeValue <= 0) {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.font = '48px sans-serif';
+            ctx.fillText('Another innocent killed by Dr. Fauci', canvas.width / 2 - 300, canvas.height / 2);
+        }
+    } else {
+        if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
+        if (keys.ArrowDown && player.y < canvas.height - player.height) player.y += player.speed;
+        if (keys.Space) {
+            player.bullets.push({ x: player.x + player.width - 5, y: player.y + player.height / 2 - 1, width: 10, height: 2, speed: 7 });
+            keys.Space = false; // Only shoot one bullet per key press
+        }
     }
 }
 
@@ -144,9 +188,12 @@ function gameLoop() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     update();
     drawPlayer();
-    drawBullets();
-    drawEnemies();
-    drawEnemyBullets();
+    if (!player.isDead || player.fadeValue > 0) {
+        drawBullets();
+        drawEnemies();
+        drawEnemyBullets();
+        drawHealthBar();
+    }
     handleCollisions();
     requestAnimationFrame(gameLoop);
 }
