@@ -50,18 +50,6 @@ function drawBullets() {
     });
 }
 
-function drawEnemyBullets() {
-    enemies.forEach(enemy => {
-        enemy.bullets.forEach((bullet, index) => {
-            bullet.x -= bullet.speed;
-            if (bullet.x < 0) {
-                enemy.bullets.splice(index, 1);
-            }
-            ctx.drawImage(needleImage, bullet.x, bullet.y, bullet.width, bullet.height);
-        });
-    });
-}
-
 function drawEnemies() {
     enemies.forEach((enemy, index) => {
         enemy.x -= enemy.speed;
@@ -85,6 +73,18 @@ function drawEnemies() {
         }
 
         enemy.animationFrame += enemy.animationSpeed;
+    });
+}
+
+function drawEnemyBullets() {
+    enemies.forEach(enemy => {
+        enemy.bullets.forEach((bullet, index) => {
+            bullet.x -= bullet.speed;
+            if (bullet.x < 0) {
+                enemy.bullets.splice(index, 1);
+            }
+            ctx.drawImage(needleImage, bullet.x, bullet.y, bullet.width, bullet.height);
+        });
     });
 }
 
@@ -145,8 +145,8 @@ function gameLoop() {
     update();
     drawPlayer();
     drawBullets();
-    drawEnemyBullets();
     drawEnemies();
+    drawEnemyBullets();
     handleCollisions();
     requestAnimationFrame(gameLoop);
 }
@@ -161,7 +161,7 @@ function loadImages(images, callback) {
             }
         };
         image.onerror = () => {
-            console.error(`Error loading image: ${image.src}`); 
+            console.error(`Error loading image: ${image.src}`);
         };
     });
 }
