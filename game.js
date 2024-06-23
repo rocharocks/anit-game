@@ -74,12 +74,12 @@ function drawEnemies() {
         if (enemy.shootCooldown <= 0) {
             enemy.bullets.push({
                 x: enemy.x,
-                y: enemy.y + enemy.height / 2 - 15,
-                width: 30,
-                height: 6,
-                speed: 1.67
+                y: enemy.y + enemy.height / 2 - 37.5, // Adjust y-position for the bigger needle
+                width: 50,
+                height: 10,
+                speed: 1
             });
-            enemy.shootCooldown = 60; // 1 second at 60 FPS
+            enemy.shootCooldown = 300; // 5 seconds at 60 FPS
         } else {
             enemy.shootCooldown--;
         }
@@ -97,7 +97,7 @@ function spawnEnemy() {
         height: 128,
         speed: 1,
         bullets: [],
-        shootCooldown: 60,
+        shootCooldown: 300,
         animationFrame: 0,
         animationSpeed: 0.05 + Math.random() * 0.1
     });
