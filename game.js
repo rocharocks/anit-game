@@ -65,7 +65,7 @@ function drawEnemies() {
                 y: enemy.y + enemy.height / 2 - 15,
                 width: 60, // 2x bigger width
                 height: 12, // 2x bigger height
-                speed: 0.83 // 2x slower speed
+                speed: 1.25 * 1.5 // 1.5x faster speed again
             });
             enemy.shootCooldown = 120; // 2 seconds at 60 FPS
         } else {
@@ -95,7 +95,7 @@ function spawnEnemy() {
         y,
         width: 128,
         height: 128,
-        speed: 1,
+        speed: 0.67 * 0.67, // 1.5x slower again
         bullets: [],
         shootCooldown: 120,
         animationFrame: 0,
@@ -156,7 +156,7 @@ function loadImages(images, callback) {
     images.forEach(image => {
         image.onload = () => {
             loadedImages++;
-            if (loadedImages === images.length) { 
+            if (loadedImages === images.length) {
                 callback();
             }
         };
