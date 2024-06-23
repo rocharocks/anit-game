@@ -1,4 +1,4 @@
-const canvas = document.getElementById('gameCanvas'); 
+const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 const playerImage = new Image();
@@ -278,6 +278,31 @@ window.addEventListener('keydown', (e) => {
 
 window.addEventListener('keyup', (e) => {
     if (e.code in keys) keys[e.code] = false;
+});
+
+// Handle touch events for mobile
+let touchStartY = 0;
+
+canvas.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault(); // Prevent screen from moving
+    const touchY = e.touches[0].clientY;
+    const deltaY = touchY - touchStartY;
+
+    if (deltaY < 0 && player.y > 0) {
+        player.y -= player.speed;
+    } else if (deltaY > 0 && player.y < canvas.height - player.height) {
+        player.y += player.speed;
+    }
+
+    touchStartY = touchY;
+});
+
+canvas.addEventListener('touchend', () => {
+    keys.Space = true; // Shoot when touch ends
 });
 
 loadImages([...enemyImages, playerImage, needleImage], () => {
