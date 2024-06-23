@@ -3,11 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Retro Shooter Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Shooter Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('landscape');
+        } else if (window.screen.lockOrientation) {
+            window.screen.lockOrientation('landscape');
+        } else if (window.screen.mozLockOrientation) {
+            window.screen.mozLockOrientation('landscape');
+        } else if (window.screen.msLockOrientation) {
+            window.screen.msLockOrientation('landscape');
+        }
+    </script>
     <script src="game.js"></script>
 </body>
 </html>
