@@ -7,10 +7,10 @@ const enemyImage = new Image();
 enemyImage.src = 'enemy-128.png';
 
 const player = {
-    x: canvas.width / 2 - 32,
-    y: canvas.height - 70,
-    width: 64,
-    height: 64,
+    x: canvas.width / 2 - 64,
+    y: canvas.height - 140,
+    width: 128,
+    height: 128,
     speed: 5,
     bullets: []
 };
@@ -51,8 +51,8 @@ function drawEnemies() {
 }
 
 function spawnEnemy() {
-    const y = Math.random() * (canvas.height - 64);
-    enemies.push({ x: canvas.width, y, width: 64, height: 64, speed: 2 });
+    const y = Math.random() * (canvas.height - 128);
+    enemies.push({ x: canvas.width, y, width: 128, height: 128, speed: 2 });
 }
 
 function handleCollisions() {
