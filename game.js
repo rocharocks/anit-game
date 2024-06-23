@@ -17,11 +17,12 @@ const player = {
 
 const enemies = [];
 
+let touchStartY = 0;
+let touchEndY = 0;
+
 const keys = {
     ArrowUp: false,
     ArrowDown: false,
-    ArrowLeft: false,
-    ArrowRight: false,
     Space: false
 };
 
@@ -55,7 +56,7 @@ function drawEnemies() {
 
 function spawnEnemy() {
     const y = Math.random() * (canvas.height - 128);
-    enemies.push({ x: canvas.width, y, width: 128, height: 128, speed: 1 });
+    enemies.push({ x: canvas.width, y, width: 128, height: 128, speed: 2.5 });
 }
 
 function handleCollisions() {
@@ -98,6 +99,29 @@ window.addEventListener('keydown', (e) => {
 
 window.addEventListener('keyup', (e) => {
     if (e.code in keys) keys[e.code] = false;
+});
+
+canvas.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    touchEndY = e.touches[0].clientY;
+    if (touchEndY < touchStartY && player.y > 0) {
+        player.y -= player.speed;
+    }
+    if (touchEndY > touchStartY && player.y < canvas.height - player.height) {
+        player.y += player.speed;
+    }
+});
+
+canvas.addEventListener('touchend', (e) => {
+    touchStartY = 0;
+    touchEndY = 0;
+});
+
+canvas.addEventListener('click', (e) => {
+    player.bullets.push({ x: player.x + player.width - 5, y: player.y + player.height / 2 - 1, width: 10, height: 2, speed: 7 });
 });
 
 setInterval(spawnEnemy, 1000);
