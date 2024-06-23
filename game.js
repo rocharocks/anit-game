@@ -7,8 +7,8 @@ const enemyImage = new Image();
 enemyImage.src = 'enemy-128.png';
 
 const player = {
-    x: canvas.width / 2 - 64,
-    y: canvas.height - 140,
+    x: 50,
+    y: canvas.height / 2 - 64,
     width: 128,
     height: 128,
     speed: 5,
@@ -43,16 +43,19 @@ function drawBullets() {
 function drawEnemies() {
     enemies.forEach((enemy, index) => {
         enemy.x -= enemy.speed;
-        if (enemy.x < 0) {
+        if (enemy.x < -enemy.width) {
             enemies.splice(index, 1);
         }
-        ctx.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
+        ctx.save();
+        ctx.scale(-1, 1);
+        ctx.drawImage(enemyImage, -enemy.x - enemy.width, enemy.y, enemy.width, enemy.height);
+        ctx.restore();
     });
 }
 
 function spawnEnemy() {
     const y = Math.random() * (canvas.height - 128);
-    enemies.push({ x: canvas.width, y, width: 128, height: 128, speed: 2 });
+    enemies.push({ x: canvas.width, y, width: 128, height: 128, speed: 1 });
 }
 
 function handleCollisions() {
@@ -70,8 +73,8 @@ function handleCollisions() {
 }
 
 function update() {
-    if (keys.ArrowLeft && player.x > 0) player.x -= player.speed;
-    if (keys.ArrowRight && player.x < canvas.width - player.width) player.x += player.speed;
+    if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
+    if (keys.ArrowDown && player.y < canvas.height - player.height) player.y += player.speed;
     if (keys.Space) {
         player.bullets.push({ x: player.x + player.width - 5, y: player.y + player.height / 2 - 1, width: 10, height: 2, speed: 7 });
         keys.Space = false; // Only shoot one bullet per key press
@@ -79,7 +82,8 @@ function update() {
 }
 
 function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     update();
     drawPlayer();
     drawBullets();
