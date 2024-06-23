@@ -24,7 +24,8 @@ const player = {
     health: 10,
     isDead: false,
     fadeValue: 1,
-    rotation: 0
+    rotation: 0,
+    splatters: []
 };
 
 const enemies = [];
@@ -49,6 +50,42 @@ function getSpeedMultiplier() {
     const elapsed = Date.now() - startTime;
     const ratio = Math.min(elapsed / duration, 1);
     return 1 + ratio * (maxMultiplier - 1);
+}
+
+function createSplatter(x, y, color) {
+    const splatter = [];
+    for (let i = 0; i < 20; i++) {
+        splatter.push({
+            x,
+            y,
+            dx: (Math.random() - 0.5) * 6,
+            dy: (Math.random() - 0.5) * 6,
+            size: Math.random() * 3 + 1,
+            color
+        });
+    }
+    return splatter;
+}
+
+function drawSplatter(splatters) {
+    splatters.forEach((splatter, splatterIndex) => {
+        splatter.forEach((dot, dotIndex) => {
+            dot.x += dot.dx;
+            dot.y += dot.dy;
+            dot.size *= 0.95;
+            if (dot.size < 0.1) {
+                splatter.splice(dotIndex, 1);
+            } else {
+                ctx.fillStyle = dot.color;
+                ctx.beginPath();
+                ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        });
+        if (splatter.length === 0) {
+            splatters.splice(splatterIndex, 1);
+        }
+    });
 }
 
 function drawPlayer() {
@@ -155,6 +192,7 @@ function handleCollisions() {
                 bullet.y + bullet.height > enemy.y) {
                 player.bullets.splice(bulletIndex, 1);
                 enemies.splice(enemyIndex, 1);
+                player.splatters.push(...createSplatter(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 'red'));
             }
         });
     });
@@ -167,6 +205,7 @@ function handleCollisions() {
                 bullet.y + bullet.height > player.y) {
                 enemy.bullets.splice(bulletIndex, 1);
                 player.health--;
+                player.splatters.push(...createSplatter(player.x + player.width / 2, player.y + player.height / 2, 'red'));
                 if (player.health <= 0 && !player.isDead) {
                     player.isDead = true;
                 }
@@ -212,6 +251,7 @@ function gameLoop() {
         drawEnemies();
         drawEnemyBullets();
         drawHealthBar();
+        drawSplatter(player.splatters);
     }
     handleCollisions();
     requestAnimationFrame(gameLoop);
