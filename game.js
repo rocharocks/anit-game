@@ -184,9 +184,11 @@ function update() {
         if (player.fadeValue <= 0) {
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'white';
-            ctx.font = '36px sans-serif'; // Reduced font size
-            ctx.fillText('Another innocent killed by Dr. Fauci', canvas.width / 2 - 220, canvas.height / 2);
+            ctx.fillStyle = 'red';
+            ctx.font = '24px sans-serif'; // Reduced font size
+            ctx.textAlign = 'center';
+            ctx.fillText('ANOTHER INNOCENT KILLED BY', canvas.width / 2, canvas.height / 2 - 20);
+            ctx.fillText('DR. FAUCI', canvas.width / 2, canvas.height / 2 + 20);
         }
     } else {
         if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
