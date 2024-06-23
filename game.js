@@ -38,6 +38,18 @@ const keys = {
 };
 
 let allImagesLoaded = false;
+let startTime = null;
+
+const initialEnemySpeed = 0.67 * 1.25;
+const initialNeedleSpeed = 1.25 * 1.25;
+const maxMultiplier = 2;
+const duration = 120000; // 2 minutes in milliseconds
+
+function getSpeedMultiplier() {
+    const elapsed = Date.now() - startTime;
+    const ratio = Math.min(elapsed / duration, 1);
+    return 1 + ratio * (maxMultiplier - 1);
+}
 
 function drawPlayer() {
     if (player.isDead) {
@@ -78,8 +90,10 @@ function drawBullets() {
 }
 
 function drawEnemies() {
+    const speedMultiplier = getSpeedMultiplier();
+
     enemies.forEach((enemy, index) => {
-        enemy.x -= enemy.speed;
+        enemy.x -= enemy.speed * speedMultiplier;
         if (enemy.x < -enemy.width) {
             enemies.splice(index, 1);
         }
@@ -92,7 +106,7 @@ function drawEnemies() {
                 y: enemy.y + enemy.height / 2 - 15,
                 width: 60, // 2x bigger width
                 height: 12, // 2x bigger height
-                speed: 1.25 * 1.25 // 1.25x faster again
+                speed: initialNeedleSpeed * speedMultiplier // Gradually increasing speed
             });
             enemy.shootCooldown = 240; // 4 seconds at 60 FPS (half as frequent)
         } else {
@@ -104,9 +118,11 @@ function drawEnemies() {
 }
 
 function drawEnemyBullets() {
+    const speedMultiplier = getSpeedMultiplier();
+
     enemies.forEach(enemy => {
         enemy.bullets.forEach((bullet, index) => {
-            bullet.x -= bullet.speed;
+            bullet.x -= bullet.speed * speedMultiplier;
             if (bullet.x < 0) {
                 enemy.bullets.splice(index, 1);
             }
@@ -122,7 +138,7 @@ function spawnEnemy() {
         y,
         width: 128,
         height: 128,
-        speed: 0.67 * 1.25, // 1.25x slower again
+        speed: initialEnemySpeed, // Initial speed
         bullets: [],
         shootCooldown: 240,
         animationFrame: 0,
@@ -169,8 +185,8 @@ function update() {
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'white';
-            ctx.font = '48px sans-serif';
-            ctx.fillText('Another innocent killed by Dr. Fauci', canvas.width / 2 - 300, canvas.height / 2);
+            ctx.font = '36px sans-serif'; // Reduced font size
+            ctx.fillText('Another innocent killed by Dr. Fauci', canvas.width / 2 - 220, canvas.height / 2);
         }
     } else {
         if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
@@ -184,6 +200,7 @@ function update() {
 
 function gameLoop() {
     if (!allImagesLoaded) return; // Wait until all images are loaded
+    if (!startTime) startTime = Date.now();
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     update();
