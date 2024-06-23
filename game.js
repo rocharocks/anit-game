@@ -33,7 +33,6 @@ const keys = {
     Space: false
 };
 
-let enemyAnimationFrame = 0;
 let allImagesLoaded = false;
 
 function drawPlayer() {
@@ -69,27 +68,39 @@ function drawEnemies() {
         if (enemy.x < -enemy.width) {
             enemies.splice(index, 1);
         }
-        const currentImage = enemyImages[Math.floor(enemyAnimationFrame) % enemyImages.length];
+        const currentImage = enemyImages[Math.floor(enemy.animationFrame) % enemyImages.length];
         ctx.drawImage(currentImage, enemy.x, enemy.y, enemy.width, enemy.height);
 
         if (enemy.shootCooldown <= 0) {
             enemy.bullets.push({
                 x: enemy.x,
-                y: enemy.y + enemy.height / 2 - 5,
-                width: 10,
-                height: 2,
-                speed: 5
+                y: enemy.y + enemy.height / 2 - 15,
+                width: 30,
+                height: 6,
+                speed: 1.67
             });
-            enemy.shootCooldown = 14;
+            enemy.shootCooldown = 60; // 1 second at 60 FPS
         } else {
             enemy.shootCooldown--;
         }
+
+        enemy.animationFrame += enemy.animationSpeed;
     });
 }
 
 function spawnEnemy() {
     const y = Math.random() * (canvas.height - 128);
-    enemies.push({ x: canvas.width, y, width: 128, height: 128, speed: 1, bullets: [], shootCooldown: 14 });
+    enemies.push({
+        x: canvas.width,
+        y,
+        width: 128,
+        height: 128,
+        speed: 1,
+        bullets: [],
+        shootCooldown: 60,
+        animationFrame: 0,
+        animationSpeed: 0.05 + Math.random() * 0.1
+    });
 }
 
 function handleCollisions() {
@@ -125,7 +136,6 @@ function update() {
         player.bullets.push({ x: player.x + player.width - 5, y: player.y + player.height / 2 - 1, width: 10, height: 2, speed: 7 });
         keys.Space = false; // Only shoot one bullet per key press
     }
-    enemyAnimationFrame += 0.1; // Adjust the speed of animation as needed
 }
 
 function gameLoop() {
