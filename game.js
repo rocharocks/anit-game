@@ -65,9 +65,9 @@ function drawEnemies() {
                 y: enemy.y + enemy.height / 2 - 15,
                 width: 60, // 2x bigger width
                 height: 12, // 2x bigger height
-                speed: 1.25 * 1.5 // 1.5x faster speed again
+                speed: 1.25 * 1.25 // 1.25x faster again
             });
-            enemy.shootCooldown = 120; // 2 seconds at 60 FPS
+            enemy.shootCooldown = 240; // 4 seconds at 60 FPS (half as frequent)
         } else {
             enemy.shootCooldown--;
         }
@@ -95,9 +95,9 @@ function spawnEnemy() {
         y,
         width: 128,
         height: 128,
-        speed: 0.67 * 0.67, // 1.5x slower again
+        speed: 0.67 * 1.25, // 1.25x slower again
         bullets: [],
-        shootCooldown: 120,
+        shootCooldown: 240,
         animationFrame: 0,
         animationSpeed: 0.05 + Math.random() * 0.1
     });
@@ -176,6 +176,6 @@ window.addEventListener('keyup', (e) => {
 
 loadImages([...enemyImages, playerImage, needleImage], () => {
     allImagesLoaded = true;
-    setInterval(spawnEnemy, 1000);
+    setInterval(spawnEnemy, 2000); // half as frequent spawn
     gameLoop();
 });
