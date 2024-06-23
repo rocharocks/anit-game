@@ -24,11 +24,11 @@ const player = {
     health: 10,
     isDead: false,
     fadeValue: 1,
-    rotation: 0,
-    splatters: []
+    rotation: 0
 };
 
 const enemies = [];
+const splatters = [];
 
 const keys = {
     ArrowUp: false,
@@ -67,7 +67,7 @@ function createSplatter(x, y, color) {
     return splatter;
 }
 
-function drawSplatter(splatters) {
+function drawSplatter() {
     splatters.forEach((splatter, splatterIndex) => {
         splatter.forEach((dot, dotIndex) => {
             dot.x += dot.dx;
@@ -192,7 +192,7 @@ function handleCollisions() {
                 bullet.y + bullet.height > enemy.y) {
                 player.bullets.splice(bulletIndex, 1);
                 enemies.splice(enemyIndex, 1);
-                player.splatters.push(...createSplatter(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 'red'));
+                splatters.push(createSplatter(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 'red'));
             }
         });
     });
@@ -205,7 +205,7 @@ function handleCollisions() {
                 bullet.y + bullet.height > player.y) {
                 enemy.bullets.splice(bulletIndex, 1);
                 player.health--;
-                player.splatters.push(...createSplatter(player.x + player.width / 2, player.y + player.height / 2, 'red'));
+                splatters.push(createSplatter(player.x + player.width / 2, player.y + player.height / 2, 'red'));
                 if (player.health <= 0 && !player.isDead) {
                     player.isDead = true;
                 }
@@ -251,7 +251,7 @@ function gameLoop() {
         drawEnemies();
         drawEnemyBullets();
         drawHealthBar();
-        drawSplatter(player.splatters);
+        drawSplatter();
     }
     handleCollisions();
     requestAnimationFrame(gameLoop);
