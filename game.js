@@ -69,7 +69,9 @@ function drawEnemies() {
             enemies.splice(index, 1);
         }
         const currentImage = enemyImages[Math.floor(enemyAnimationFrame) % enemyImages.length];
-        ctx.drawImage(currentImage, enemy.x, enemy.y, enemy.width, enemy.height);
+        if (currentImage.complete) {
+            ctx.drawImage(currentImage, enemy.x, enemy.y, enemy.width, enemy.height);
+        }
 
         if (enemy.shootCooldown <= 0) {
             enemy.bullets.push({
