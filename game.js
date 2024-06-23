@@ -74,12 +74,12 @@ function drawEnemies() {
         if (enemy.shootCooldown <= 0) {
             enemy.bullets.push({
                 x: enemy.x,
-                y: enemy.y + enemy.height / 2 - 5,
-                width: 50,
-                height: 10,
-                speed: 0.6 // 5x slower
+                y: enemy.y + enemy.height / 2 - 15,
+                width: 60, // 2x bigger width
+                height: 12, // 2x bigger height
+                speed: 0.83 // 2x slower speed
             });
-            enemy.shootCooldown = 300; // 5 seconds at 60 FPS
+            enemy.shootCooldown = 120; // 2 seconds at 60 FPS
         } else {
             enemy.shootCooldown--;
         }
@@ -97,7 +97,7 @@ function spawnEnemy() {
         height: 128,
         speed: 1,
         bullets: [],
-        shootCooldown: 300,
+        shootCooldown: 120,
         animationFrame: 0,
         animationSpeed: 0.05 + Math.random() * 0.1
     });
