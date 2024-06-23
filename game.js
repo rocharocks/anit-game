@@ -161,7 +161,7 @@ function loadImages(images, callback) {
             }
         };
         image.onerror = () => {
-            console.error(`Error loading image: ${image.src}`);
+            console.error(`Error loading image: ${image.src}`); 
         };
     });
 }
