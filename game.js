@@ -156,7 +156,7 @@ function loadImages(images, callback) {
     images.forEach(image => {
         image.onload = () => {
             loadedImages++;
-            if (loadedImages === images.length) {
+            if (loadedImages === images.length) { 
                 callback();
             }
         };
