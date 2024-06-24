@@ -253,13 +253,12 @@ function startGame() {
                 if (antivaxerAlpha <= 0) {
                     showAntivaxer = false;
                     clearInterval(fadeOut);
+                    startTime = Date.now();
+                    setInterval(spawnEnemy, 2000); // Spawn enemies every 2 seconds
+                    gameLoop();
                 }
             }, 50);
         }, 2000);
-        
-        startTime = Date.now();
-        setInterval(spawnEnemy, 2000); // Spawn enemies every 2 seconds
-        gameLoop();
     });
 }
 
