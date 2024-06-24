@@ -16,7 +16,6 @@ function resizeCanvas() {
 }
 
 window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
 const playerImage = new Image();
 playerImage.src = 'player-128.png';
@@ -289,6 +288,15 @@ function loadImages(images, callback) {
     });
 }
 
+function initGame() {
+    resizeCanvas();
+    loadImages([...enemyImages, playerImage, needleImage], () => {
+        allImagesLoaded = true;
+        setInterval(spawnEnemy, 2000); // half as frequent spawn
+        gameLoop();
+    });
+}
+
 window.addEventListener('keydown', (e) => {
     if (e.code in keys) keys[e.code] = true;
 });
@@ -320,10 +328,4 @@ canvas.addEventListener('touchmove', (e) => {
 
 canvas.addEventListener('touchend', () => {
     keys.Space = true; // Shoot when touch ends
-});
-
-loadImages([...enemyImages, playerImage, needleImage], () => {
-    allImagesLoaded = true;
-    setInterval(spawnEnemy, 2000); // half as frequent spawn
-    gameLoop();
 });
