@@ -165,13 +165,13 @@ function drawLives() {
     const flagEmoji = '🇺🇲';
     const livesString = flagEmoji.repeat(player.lives);
     ctx.fillStyle = 'black';
-    ctx.font = '24px sans-serif';
+    ctx.font = '24px Montserrat';
     ctx.fillText(livesString, livesX, livesY);
 }
 
 function drawScore() {
     ctx.fillStyle = 'black';
-    ctx.font = '20px sans-serif';
+    ctx.font = '20px Montserrat';
     ctx.fillText(`Score: ${score}`, canvas.width - 120, 40);
 }
 
@@ -293,7 +293,7 @@ function update() {
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'red';
-            ctx.font = '24px sans-serif'; // Reduced font size
+            ctx.font = '24px Montserrat'; // Reduced font size
             ctx.textAlign = 'center';
             ctx.fillText('ANOTHER INNOCENT KILLED BY', canvas.width / 2, canvas.height / 2 - 20);
             ctx.fillText('DR. FAUCI', canvas.width / 2, canvas.height / 2 + 20);
@@ -456,7 +456,7 @@ const quizQuestions = [
             "Follow public health guidelines and get vaccinated",
             "The world will end next month"
         ],
-        correctAnswer: 2
+        correctAnswer: 2 // The index of the correct answer in the options array
     },
     {
         question: "How did Dr. Fauci describe the current state of the pandemic?",
@@ -658,7 +658,7 @@ function getRandomQuestions(count) {
 function startQuiz() {
     quizActive = true;
     correctAnswers = 0;
-    const questions = getRandomQuestions(3);
+    const questions = getRandomQuestions(2);
     displayQuiz(questions);
 }
 
@@ -668,7 +668,7 @@ function displayQuiz(questions) {
     document.body.appendChild(quizContainer);
 
     const message = document.createElement('p');
-    message.textContent = "EARN AN EXTRA LIFE BY ANSWERING THREE QUESTIONS CORRECTLY!";
+    message.textContent = "EARN AN EXTRA LIFE BY ANSWERING TWO QUESTIONS CORRECTLY!";
     quizContainer.appendChild(message);
 
     questions.forEach((question, index) => {
@@ -694,10 +694,15 @@ function handleAnswer(correctAnswer, selectedAnswer, totalQuestions, quizContain
         correctAnswers++;
     }
 
-    if (correctAnswers >= 3) {
+    if (correctAnswers >= 2) {
         player.lives++;
-        quizActive = false;
-        quizContainer.remove();
+        const successMessage = document.createElement('p');
+        successMessage.textContent = "YOU EARNED AN EXTRA LIFE!";
+        quizContainer.appendChild(successMessage);
+        setTimeout(() => {
+            quizActive = false;
+            quizContainer.remove();
+        }, 2000);
     } else if (--totalQuestions === 0) {
         quizActive = false;
         quizContainer.remove();
