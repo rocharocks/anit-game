@@ -49,6 +49,7 @@ const player = {
 };
 
 let score = 0;
+let quizActive = false;
 
 const enemies = [];
 const splatters = [];
