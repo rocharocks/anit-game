@@ -209,7 +209,7 @@ function getRandomQuestions(count) {
 function startQuiz() {
     quizActive = true;
     correctAnswers = 0;
-    const questions = getRandomQuestions(2);
+    const questions = getRandomQuestions(1);
     displayQuiz(questions);
 }
 
@@ -219,7 +219,7 @@ function displayQuiz(questions) {
     document.body.appendChild(quizContainer);
 
     const message = document.createElement('p');
-    message.textContent = "EARN AN EXTRA LIFE BY ANSWERING TWO QUESTIONS CORRECTLY!";
+    message.textContent = "EARN AN EXTRA LIFE BY ANSWERING ONE QUESTION CORRECTLY!";
     quizContainer.appendChild(message);
 
     questions.forEach((question, index) => {
@@ -234,18 +234,14 @@ function displayQuiz(questions) {
         question.options.forEach((option, i) => {
             const optionButton = document.createElement('button');
             optionButton.textContent = option;
-            optionButton.addEventListener('click', () => handleAnswer(question.correctAnswer, i, questions.length, quizContainer));
+            optionButton.addEventListener('click', () => handleAnswer(question.correctAnswer, i, quizContainer));
             questionElement.appendChild(optionButton);
         });
     });
 }
 
-function handleAnswer(correctAnswer, selectedAnswer, totalQuestions, quizContainer) {
+function handleAnswer(correctAnswer, selectedAnswer, quizContainer) {
     if (correctAnswer === selectedAnswer) {
-        correctAnswers++;
-    }
-
-    if (correctAnswers >= 2) {
         player.lives++;
         const successMessage = document.createElement('p');
         successMessage.textContent = "YOU EARNED AN EXTRA LIFE!";
@@ -254,7 +250,7 @@ function handleAnswer(correctAnswer, selectedAnswer, totalQuestions, quizContain
             quizActive = false;
             quizContainer.remove();
         }, 2000);
-    } else if (--totalQuestions === 0) {
+    } else {
         quizActive = false;
         quizContainer.remove();
     }
