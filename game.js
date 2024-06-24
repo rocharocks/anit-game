@@ -42,7 +42,7 @@ const player = {
     speed: 5,
     bullets: [],
     health: 10,
-    lives: 3,
+    lives: 4,
     isDead: false,
     fadeValue: 1,
     rotation: 0
@@ -151,10 +151,16 @@ function drawHealthBar() {
 
     ctx.strokeStyle = 'black';
     ctx.strokeRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+}
 
+function drawLives() {
+    const livesX = 250;
+    const livesY = 20;
+    const flagEmoji = '🇺🇸🇺🇲';
+    const livesString = flagEmoji.repeat(player.lives);
     ctx.fillStyle = 'black';
-    ctx.font = '20px sans-serif';
-    ctx.fillText(`Lives: ${player.lives}`, healthBarX, healthBarY + 40);
+    ctx.font = '24px sans-serif';
+    ctx.fillText(livesString, livesX, livesY + 15);
 }
 
 function drawScore() {
@@ -198,7 +204,7 @@ function drawEnemies() {
             enemy.shootCooldown--;
         }
 
-        enemy.animationFrame += enemy.animationSpeed;
+                enemy.animationFrame += enemy.animationSpeed;
     });
 }
 
@@ -303,6 +309,7 @@ function gameLoop() {
         drawEnemies();
         drawEnemyBullets();
         drawHealthBar();
+        drawLives();
         drawScore();
         drawSplatter();
     }
@@ -404,3 +411,4 @@ canvas.addEventListener('touchend', () => {
 });
 
 startGame();
+
