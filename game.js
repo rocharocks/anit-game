@@ -19,20 +19,20 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 const playerImage = new Image();
-playerImage.src = 'player-128.png';
+playerImage.src = 'assets/player-128.png';
 
 const enemyImages = [];
 for (let i = 1; i <= 7; i++) {
     const img = new Image();
-    img.src = `enemy-${i}.png`;
+    img.src = `assets/enemy-${i}.png`;
     enemyImages.push(img);
 }
 
 const needleImage = new Image();
-needleImage.src = 'needle.png';
+needleImage.src = 'assets/needle.png';
 
 const antivaxerImage = new Image();
-antivaxerImage.src = 'antivaxer.jpg';
+antivaxerImage.src = 'assets/antivaxer.jpg';
 
 const player = {
     x: 50,
@@ -74,15 +74,15 @@ const maxMultiplier = 2;
 const duration = 120000; // 2 minutes in milliseconds
 
 const audioFiles = [
-    'fauci1.m4a',
-    'fauci2.m4a',
-    'fauci3.m4a',
-    'fauci4.m4a',
-    'fauci5.m4a',
-    'fauci6.m4a',
-    'fauci7.m4a',
-    'fauci8.m4a',
-    'fauci9.m4a'
+    'assets/fauci1.m4a',
+    'assets/fauci2.m4a',
+    'assets/fauci3.m4a',
+    'assets/fauci4.m4a',
+    'assets/fauci5.m4a',
+    'assets/fauci6.m4a',
+    'assets/fauci7.m4a',
+    'assets/fauci8.m4a',
+    'assets/fauci9.m4a'
 ];
 
 const audioButton = document.getElementById('audioButton');
@@ -355,7 +355,7 @@ function startGame() {
 
 function playRandomAudio() {
     const favorFauci9 = Math.random() < 1 / 3;
-    let selectedAudio = favorFauci9 ? 'fauci9.m4a' : audioFiles[Math.floor(Math.random() * 8)];
+    let selectedAudio = favorFauci9 ? 'assets/fauci9.m4a' : audioFiles[Math.floor(Math.random() * 8)];
     if (currentAudio && currentAudio.src.includes(selectedAudio)) {
         selectedAudio = audioFiles.filter(audio => audio !== selectedAudio)[Math.floor(Math.random() * 8)];
     }
@@ -365,16 +365,19 @@ function playRandomAudio() {
 }
 
 function toggleAudio() {
+    console.log('Toggling audio. Current state:', audioPlaying);
     if (audioPlaying) {
         if (currentAudio) {
             currentAudio.pause();
         }
         audioButton.textContent = '🔇';
         audioPlaying = false;
+        console.log('Audio paused');
     } else {
         playRandomAudio();
         audioButton.textContent = '🔊';
         audioPlaying = true;
+        console.log('Audio playing');
     }
 }
 
