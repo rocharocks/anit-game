@@ -60,7 +60,8 @@ const keys = {
 
 let allImagesLoaded = false;
 let startTime = null;
-let gameStarted = false;
+let showAntivaxer = true;
+let antivaxerAlpha = 1;
 
 const initialEnemySpeed = 0.67 * 1.25;
 const initialNeedleSpeed = 1.25 * 1.25;
@@ -275,6 +276,11 @@ function gameLoop() {
         drawSplatter();
     }
     handleCollisions();
+    if (showAntivaxer) {
+        ctx.globalAlpha = antivaxerAlpha;
+        ctx.drawImage(antivaxerImage, 0, 0, canvas.width, canvas.height);
+        ctx.globalAlpha = 1;
+    }
     requestAnimationFrame(gameLoop);
 }
 
@@ -290,33 +296,6 @@ function loadImages(images, callback) {
         image.onerror = () => {
             console.error(`Error loading image: ${image.src}`);
         };
-    });
-}
-
-// Show the antivaxer image before starting the game
-function showAntivaxerImage() {
-    ctx.drawImage(antivaxerImage, 0, 0, canvas.width, canvas.height);
-}
-
-function startGame() {
-    resizeCanvas();
-    loadImages([...enemyImages, playerImage, needleImage, antivaxerImage], () => {
-        allImagesLoaded = true;
-        showAntivaxerImage();
-
-        setTimeout(() => {
-            let fadeOut = setInterval(() => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.globalAlpha -= 0.05;
-                if (ctx.globalAlpha <= 0) {
-                    ctx.globalAlpha = 1;
-                    clearInterval(fadeOut);
-                    gameLoop();
-                } else {
-                    showAntivaxerImage();
-                }
-            }, 50);
-        }, 2000);
     });
 }
 
@@ -353,4 +332,16 @@ canvas.addEventListener('touchend', () => {
     keys.Space = true; // Shoot when touch ends
 });
 
-startGame();
+loadImages([...enemyImages, playerImage, needleImage, antivaxerImage], () => {
+    allImagesLoaded = true;
+    setTimeout(() => {
+        let fadeOut = setInterval(() => {
+            antivaxerAlpha -= 0.05;
+            if (antivaxerAlpha <= 0) {
+                showAntivaxer = false;
+                clearInterval(fadeOut);
+            }
+        }, 50);
+    }, 2000);
+    gameLoop();
+});
