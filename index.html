@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Shooter Game</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
         body {
             margin: 0;
             overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
         }
         canvas {
             display: block;
@@ -28,6 +30,9 @@
             padding: 20px;
             border: 2px solid black;
             z-index: 10;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
         .question {
             margin-bottom: 10px;
@@ -38,6 +43,16 @@
         .question button {
             display: block;
             margin: 5px 0;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid black;
+            background-color: #f0f0f0;
+            transition: background-color 0.2s;
+        }
+        .question button:hover {
+            background-color: #ddd;
         }
     </style>
 </head>
