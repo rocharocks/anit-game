@@ -65,11 +65,24 @@ let allImagesLoaded = false;
 let startTime = null;
 let showAntivaxer = true;
 let antivaxerAlpha = 1;
+let currentAudio = null;
 
 const initialEnemySpeed = 0.67 * 1.25;
 const initialNeedleSpeed = 1.25 * 1.25;
 const maxMultiplier = 2;
 const duration = 120000; // 2 minutes in milliseconds
+
+const audioFiles = [
+    'fauci1.m4a',
+    'fauci2.m4a',
+    'fauci3.m4a',
+    'fauci4.m4a',
+    'fauci5.m4a',
+    'fauci6.m4a',
+    'fauci7.m4a',
+    'fauci8.m4a',
+    'fauci9.m4a'
+];
 
 function getSpeedMultiplier() {
     const elapsed = Date.now() - startTime;
@@ -327,7 +340,19 @@ function startGame() {
         startTime = Date.now();
         setInterval(spawnEnemy, 2000); // Spawn enemies every 2 seconds
         gameLoop();
+        playRandomAudio();
     });
+}
+
+function playRandomAudio() {
+    const favorFauci9 = Math.random() < 1/3;
+    let selectedAudio = favorFauci9 ? 'fauci9.m4a' : audioFiles[Math.floor(Math.random() * 8)];
+    if (currentAudio && currentAudio.src.includes(selectedAudio)) {
+        selectedAudio = audioFiles.filter(audio => audio !== selectedAudio)[Math.floor(Math.random() * 8)];
+    }
+    currentAudio = new Audio(selectedAudio);
+    currentAudio.play();
+    currentAudio.onended = playRandomAudio;
 }
 
 function loadImages(images, callback) {
