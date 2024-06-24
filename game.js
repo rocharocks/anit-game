@@ -274,6 +274,9 @@ function gameLoop() {
         drawSplatter();
     }
     handleCollisions();
+    if (showAntivaxer) {
+        showAntivaxerImage();
+    }
     requestAnimationFrame(gameLoop);
 }
 
@@ -287,8 +290,6 @@ function startGame() {
     resizeCanvas();
     loadImages([...enemyImages, playerImage, needleImage, antivaxerImage], () => {
         allImagesLoaded = true;
-        gameLoop();
-
         showAntivaxerImage();
 
         setTimeout(() => {
@@ -297,10 +298,15 @@ function startGame() {
                 antivaxerAlpha -= 0.05;
                 showAntivaxerImage();
                 if (antivaxerAlpha <= 0) {
+                    showAntivaxer = false;
                     clearInterval(fadeOut);
                 }
             }, 50);
         }, 2000);
+        
+        startTime = Date.now();
+        setInterval(spawnEnemy, 2000); // Spawn enemies every 2 seconds
+        gameLoop();
     });
 }
 
