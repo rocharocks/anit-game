@@ -1,37 +1,5 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const audioButton = document.getElementById('audioButton');
-
-audioButton.addEventListener('click', toggleAudio);
-
-function playRandomAudio() {
-    const favorFauci9 = Math.random() < 1 / 3;
-    let selectedAudio = favorFauci9 ? 'assets/fauci9.m4a' : audioFiles[Math.floor(Math.random() * 8)];
-    if (currentAudio && currentAudio.src.includes(selectedAudio)) {
-        selectedAudio = audioFiles.filter(audio => audio !== selectedAudio)[Math.floor(Math.random() * 8)];
-    }
-    currentAudio = new Audio(selectedAudio);
-    currentAudio.play();
-    currentAudio.onended = playRandomAudio;
-}
-
-function toggleAudio() {
-    console.log('Toggling audio. Current state:', audioPlaying);
-    if (audioPlaying) {
-        if (currentAudio) {
-            currentAudio.pause();
-        }
-        audioButton.textContent = '🔇';
-        audioPlaying = false;
-        console.log('Audio paused');
-    } else {
-        playRandomAudio();
-        audioButton.textContent = '🔊';
-        audioPlaying = true;
-        console.log('Audio playing');
-    }
-}
-
 
 function resizeCanvas() {
     const aspectRatio = 2 / 1;
@@ -116,6 +84,8 @@ const audioFiles = [
     'assets/fauci8.m4a',
     'assets/fauci9.m4a'
 ];
+
+const audioButton = document.getElementById('audioButton');
 
 function getSpeedMultiplier() {
     const elapsed = Date.now() - startTime;
@@ -383,6 +353,34 @@ function startGame() {
     });
 }
 
+function playRandomAudio() {
+    const favorFauci9 = Math.random() < 1 / 3;
+    let selectedAudio = favorFauci9 ? 'assets/fauci9.m4a' : audioFiles[Math.floor(Math.random() * 8)];
+    if (currentAudio && currentAudio.src.includes(selectedAudio)) {
+        selectedAudio = audioFiles.filter(audio => audio !== selectedAudio)[Math.floor(Math.random() * 8)];
+    }
+    currentAudio = new Audio(selectedAudio);
+    currentAudio.play();
+    currentAudio.onended = playRandomAudio;
+}
+
+function toggleAudio() {
+    console.log('Toggling audio. Current state:', audioPlaying);
+    if (audioPlaying) {
+        if (currentAudio) {
+            currentAudio.pause();
+        }
+        audioButton.textContent = '🔇';
+        audioPlaying = false;
+        console.log('Audio paused');
+    } else {
+        playRandomAudio();
+        audioButton.textContent = '🔊';
+        audioPlaying = true;
+        console.log('Audio playing');
+    }
+}
+
 function loadImages(images, callback) {
     let loadedImages = 0;
     images.forEach(image => {
@@ -426,5 +424,7 @@ canvas.addEventListener('touchmove', (e) => {
 
     touchStartY = touchY;
 });
+
+audioButton.addEventListener('click', toggleAudio);
 
 startGame();
