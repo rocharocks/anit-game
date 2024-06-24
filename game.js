@@ -347,7 +347,6 @@ function startGame() {
         startTime = Date.now();
         setInterval(spawnEnemy, 2000); // Spawn enemies every 2 seconds
         gameLoop();
-        playRandomAudio();
     });
 }
 
@@ -409,5 +408,15 @@ canvas.addEventListener('touchmove', (e) => {
 canvas.addEventListener('touchend', () => {
     keys.Space = true; // Shoot when touch ends
 });
+
+function startAudio() {
+    if (!currentAudio) {
+        playRandomAudio();
+    }
+}
+
+document.addEventListener('click', startAudio);
+document.addEventListener('keydown', startAudio);
+document.addEventListener('touchstart', startAudio);
 
 startGame();
