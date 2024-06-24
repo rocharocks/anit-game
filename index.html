@@ -8,13 +8,29 @@
         body {
             margin: 0;
             overflow: hidden;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        canvas {
-            display: block;
+        #gameCanvas {
+            display: none;
+        }
+        #splashScreen {
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 24px;
+        }
+        @font-face {
+            font-family: 'Press Start 2P';
+            src: url('https://fonts.gstatic.com/s/pressstart2p/v9/e3t4euSdSBG3H4nXb3o_pQnM91i2hg.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
         }
     </style>
 </head>
 <body>
+    <div id="splashScreen">ANTIVAXER</div>
     <canvas id="gameCanvas"></canvas>
     <script>
         if (screen.orientation && screen.orientation.lock) {
@@ -26,6 +42,17 @@
         } else if (window.screen.msLockOrientation) {
             window.screen.msLockOrientation('landscape');
         }
+
+        function showGame() {
+            document.getElementById('splashScreen').style.display = 'none';
+            document.getElementById('gameCanvas').style.display = 'block';
+            resizeCanvas();
+            initGame();
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(showGame, 3000); // Show the game after 3 seconds
+        });
     </script>
     <script src="game.js"></script>
 </body>
