@@ -1,6 +1,23 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+function resizeCanvas() {
+    const aspectRatio = 2 / 1;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    
+    if (width / height > aspectRatio) {
+        canvas.height = height;
+        canvas.width = height * aspectRatio;
+    } else {
+        canvas.width = width;
+        canvas.height = width / aspectRatio;
+    }
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
 const playerImage = new Image();
 playerImage.src = 'player-128.png';
 
