@@ -8,34 +8,13 @@
         body {
             margin: 0;
             overflow: hidden;
-            background-color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
-        #gameCanvas {
-            display: none;
-        }
-        #splashScreen {
-            color: red;
-            font-family: 'Pixel Emulator', cursive;
-            font-size: 48px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        @font-face {
-            font-family: 'Pixel Emulator';
-            src: url('https://www.fontspace.com/download/44084/92130c01c62d1b02d5d9d89ddc7d98e3/pixel-emulator.zip');
-            font-weight: normal;
-            font-style: normal;
+        canvas {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div id="splashScreen">ANTIVAXER</div>
     <canvas id="gameCanvas"></canvas>
     <script>
         if (screen.orientation && screen.orientation.lock) {
@@ -47,17 +26,6 @@
         } else if (window.screen.msLockOrientation) {
             window.screen.msLockOrientation('landscape');
         }
-
-        function showGame() {
-            document.getElementById('splashScreen').style.display = 'none';
-            document.getElementById('gameCanvas').style.display = 'block';
-            resizeCanvas();
-            initGame();
-        }
-
-        window.addEventListener('load', () => {
-            setTimeout(showGame, 2500); // Show the game after 2.5 seconds
-        });
     </script>
     <script src="game.js"></script>
 </body>
