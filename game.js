@@ -42,10 +42,13 @@ const player = {
     speed: 5,
     bullets: [],
     health: 10,
+    lives: 3,
     isDead: false,
     fadeValue: 1,
     rotation: 0
 };
+
+let score = 0;
 
 const enemies = [];
 const splatters = [];
@@ -135,6 +138,16 @@ function drawHealthBar() {
 
     ctx.strokeStyle = 'black';
     ctx.strokeRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+
+    ctx.fillStyle = 'black';
+    ctx.font = '20px sans-serif';
+    ctx.fillText(`Lives: ${player.lives}`, healthBarX, healthBarY + 40);
+}
+
+function drawScore() {
+    ctx.fillStyle = 'black';
+    ctx.font = '20px sans-serif';
+    ctx.fillText(`Score: ${score}`, canvas.width - 120, 40);
 }
 
 function drawBullets() {
@@ -214,6 +227,7 @@ function handleCollisions() {
                 bullet.y + bullet.height > enemy.y) {
                 player.bullets.splice(bulletIndex, 1);
                 enemies.splice(enemyIndex, 1);
+                score++; // Increase score
                 splatters.push(createSplatter(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, 'red'));
             }
         });
@@ -229,7 +243,12 @@ function handleCollisions() {
                 player.health--;
                 splatters.push(createSplatter(player.x + player.width / 2, player.y + player.height / 2, 'red'));
                 if (player.health <= 0 && !player.isDead) {
-                    player.isDead = true;
+                    player.lives--;
+                    if (player.lives > 0) {
+                        player.health = 10;
+                    } else {
+                        player.isDead = true;
+                    }
                 }
             }
         });
@@ -271,6 +290,7 @@ function gameLoop() {
         drawEnemies();
         drawEnemyBullets();
         drawHealthBar();
+        drawScore();
         drawSplatter();
     }
     handleCollisions();
