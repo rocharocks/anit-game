@@ -66,6 +66,7 @@ let startTime = null;
 let showAntivaxer = true;
 let antivaxerAlpha = 1;
 let currentAudio = null;
+let audioPlaying = false;
 
 const initialEnemySpeed = 0.67 * 1.25;
 const initialNeedleSpeed = 1.25 * 1.25;
@@ -83,6 +84,8 @@ const audioFiles = [
     'fauci8.m4a',
     'fauci9.m4a'
 ];
+
+const audioButton = document.getElementById('audioButton');
 
 function getSpeedMultiplier() {
     const elapsed = Date.now() - startTime;
@@ -361,6 +364,20 @@ function playRandomAudio() {
     currentAudio.onended = playRandomAudio;
 }
 
+function toggleAudio() {
+    if (audioPlaying) {
+        if (currentAudio) {
+            currentAudio.pause();
+        }
+        audioButton.textContent = '🔇';
+        audioPlaying = false;
+    } else {
+        playRandomAudio();
+        audioButton.textContent = '🔊';
+        audioPlaying = true;
+    }
+}
+
 function loadImages(images, callback) {
     let loadedImages = 0;
     images.forEach(image => {
@@ -409,14 +426,6 @@ canvas.addEventListener('touchend', () => {
     keys.Space = true; // Shoot when touch ends
 });
 
-function startAudio() {
-    if (!currentAudio) {
-        playRandomAudio();
-    }
-}
-
-document.addEventListener('click', startAudio);
-document.addEventListener('keydown', startAudio);
-document.addEventListener('touchstart', startAudio);
+audioButton.addEventListener('click', toggleAudio);
 
 startGame();
