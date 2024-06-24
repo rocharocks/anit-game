@@ -42,7 +42,7 @@ const player = {
     speed: 5,
     bullets: [],
     health: 10,
-    lives: 4,
+    lives: 3,
     isDead: false,
     fadeValue: 1,
     rotation: 0
@@ -155,12 +155,12 @@ function drawHealthBar() {
 
 function drawLives() {
     const livesX = 250;
-    const livesY = 20;
-    const flagEmoji = '🇺🇸🇺🇲';
+    const livesY = 35;
+    const flagEmoji = '🇺🇲';
     const livesString = flagEmoji.repeat(player.lives);
     ctx.fillStyle = 'black';
     ctx.font = '24px sans-serif';
-    ctx.fillText(livesString, livesX, livesY + 15);
+    ctx.fillText(livesString, livesX, livesY);
 }
 
 function drawScore() {
@@ -204,7 +204,7 @@ function drawEnemies() {
             enemy.shootCooldown--;
         }
 
-                enemy.animationFrame += enemy.animationSpeed;
+        enemy.animationFrame += enemy.animationSpeed;
     });
 }
 
@@ -352,7 +352,7 @@ function startGame() {
 }
 
 function playRandomAudio() {
-    const favorFauci9 = Math.random() < 1/3;
+    const favorFauci9 = Math.random() < 1 / 3;
     let selectedAudio = favorFauci9 ? 'fauci9.m4a' : audioFiles[Math.floor(Math.random() * 8)];
     if (currentAudio && currentAudio.src.includes(selectedAudio)) {
         selectedAudio = audioFiles.filter(audio => audio !== selectedAudio)[Math.floor(Math.random() * 8)];
@@ -411,4 +411,3 @@ canvas.addEventListener('touchend', () => {
 });
 
 startGame();
-
