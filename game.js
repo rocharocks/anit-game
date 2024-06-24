@@ -19,20 +19,20 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 const playerImage = new Image();
-playerImage.src = 'assets/player-128.png';
+playerImage.src = 'player-128.png';
 
 const enemyImages = [];
 for (let i = 1; i <= 7; i++) {
     const img = new Image();
-    img.src = `assets/enemy-${i}.png`;
+    img.src = `enemy-${i}.png`;
     enemyImages.push(img);
 }
 
 const needleImage = new Image();
-needleImage.src = 'assets/needle.png';
+needleImage.src = 'needle.png';
 
 const antivaxerImage = new Image();
-antivaxerImage.src = 'assets/antivaxer.jpg';
+antivaxerImage.src = 'antivaxer.jpg';
 
 const player = {
     x: 50,
@@ -74,15 +74,15 @@ const maxMultiplier = 2;
 const duration = 120000; // 2 minutes in milliseconds
 
 const audioFiles = [
-    'assets/fauci1.m4a',
-    'assets/fauci2.m4a',
-    'assets/fauci3.m4a',
-    'assets/fauci4.m4a',
-    'assets/fauci5.m4a',
-    'assets/fauci6.m4a',
-    'assets/fauci7.m4a',
-    'assets/fauci8.m4a',
-    'assets/fauci9.m4a'
+    'fauci1.m4a',
+    'fauci2.m4a',
+    'fauci3.m4a',
+    'fauci4.m4a',
+    'fauci5.m4a',
+    'fauci6.m4a',
+    'fauci7.m4a',
+    'fauci8.m4a',
+    'fauci9.m4a'
 ];
 
 const audioButton = document.getElementById('audioButton');
@@ -331,7 +331,7 @@ function showAntivaxerImage() {
 
 function startGame() {
     resizeCanvas();
-    loadImages([...enemyImages, playerImage, needleImage, antivaxerImage], () => {
+    loadImages([playerImage, needleImage, antivaxerImage, ...enemyImages], () => {
         allImagesLoaded = true;
         showAntivaxerImage();
 
@@ -355,7 +355,7 @@ function startGame() {
 
 function playRandomAudio() {
     const favorFauci9 = Math.random() < 1 / 3;
-    let selectedAudio = favorFauci9 ? 'assets/fauci9.m4a' : audioFiles[Math.floor(Math.random() * 8)];
+    let selectedAudio = favorFauci9 ? 'fauci9.m4a' : audioFiles[Math.floor(Math.random() * 8)];
     if (currentAudio && currentAudio.src.includes(selectedAudio)) {
         selectedAudio = audioFiles.filter(audio => audio !== selectedAudio)[Math.floor(Math.random() * 8)];
     }
@@ -423,6 +423,10 @@ canvas.addEventListener('touchmove', (e) => {
     }
 
     touchStartY = touchY;
+});
+
+canvas.addEventListener('touchend', () => {
+    keys.Space = true; // Shoot when touch ends
 });
 
 audioButton.addEventListener('click', toggleAudio);
