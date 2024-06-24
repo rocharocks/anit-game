@@ -12,6 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
         }
         #gameCanvas {
             display: none;
@@ -19,7 +20,11 @@
         #splashScreen {
             color: white;
             font-family: 'Press Start 2P', cursive;
-            font-size: 24px;
+            font-size: 48px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         @font-face {
             font-family: 'Press Start 2P';
