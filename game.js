@@ -262,8 +262,6 @@ function update() {
 }
 
 function gameLoop() {
-    if (!allImagesLoaded) return; // Wait until all images are loaded
-    if (!startTime) startTime = Date.now();
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     update();
@@ -276,12 +274,35 @@ function gameLoop() {
         drawSplatter();
     }
     handleCollisions();
-    if (showAntivaxer) {
-        ctx.globalAlpha = antivaxerAlpha;
-        ctx.drawImage(antivaxerImage, 0, 0, canvas.width, canvas.height);
-        ctx.globalAlpha = 1;
-    }
     requestAnimationFrame(gameLoop);
+}
+
+function showAntivaxerImage() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = antivaxerAlpha;
+    ctx.drawImage(antivaxerImage, 0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = 1;
+}
+
+function startGame() {
+    resizeCanvas();
+    loadImages([...enemyImages, playerImage, needleImage, antivaxerImage], () => {
+        allImagesLoaded = true;
+        gameLoop();
+
+        showAntivaxerImage();
+
+        setTimeout(() => {
+            let fadeOut = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                antivaxerAlpha -= 0.05;
+                showAntivaxerImage();
+                if (antivaxerAlpha <= 0) {
+                    clearInterval(fadeOut);
+                }
+            }, 50);
+        }, 2000);
+    });
 }
 
 function loadImages(images, callback) {
@@ -332,16 +353,4 @@ canvas.addEventListener('touchend', () => {
     keys.Space = true; // Shoot when touch ends
 });
 
-loadImages([...enemyImages, playerImage, needleImage, antivaxerImage], () => {
-    allImagesLoaded = true;
-    setTimeout(() => {
-        let fadeOut = setInterval(() => {
-            antivaxerAlpha -= 0.05;
-            if (antivaxerAlpha <= 0) {
-                showAntivaxer = false;
-                clearInterval(fadeOut);
-            }
-        }, 50);
-    }, 2000);
-    gameLoop();
-});
+startGame();
