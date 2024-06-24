@@ -1,7 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-function resizeCanvas() {
+function resizeCanvas() { 
     const aspectRatio = 2 / 1;
     const width = window.innerWidth;
     const height = window.innerHeight;
