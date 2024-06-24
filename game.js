@@ -1,7 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-function resizeCanvas() { 
+function resizeCanvas() {
     const aspectRatio = 2 / 1;
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -16,6 +16,7 @@ function resizeCanvas() {
 }
 
 window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
 const playerImage = new Image();
 playerImage.src = 'player-128.png';
@@ -29,6 +30,9 @@ for (let i = 1; i <= 7; i++) {
 
 const needleImage = new Image();
 needleImage.src = 'needle.png';
+
+const antivaxerImage = new Image();
+antivaxerImage.src = 'antivaxer.jpg';
 
 const player = {
     x: 50,
@@ -56,6 +60,7 @@ const keys = {
 
 let allImagesLoaded = false;
 let startTime = null;
+let gameStarted = false;
 
 const initialEnemySpeed = 0.67 * 1.25;
 const initialNeedleSpeed = 1.25 * 1.25;
@@ -288,12 +293,30 @@ function loadImages(images, callback) {
     });
 }
 
-function initGame() {
+// Show the antivaxer image before starting the game
+function showAntivaxerImage() {
+    ctx.drawImage(antivaxerImage, 0, 0, canvas.width, canvas.height);
+}
+
+function startGame() {
     resizeCanvas();
-    loadImages([...enemyImages, playerImage, needleImage], () => {
+    loadImages([...enemyImages, playerImage, needleImage, antivaxerImage], () => {
         allImagesLoaded = true;
-        setInterval(spawnEnemy, 2000); // half as frequent spawn
-        gameLoop();
+        showAntivaxerImage();
+
+        setTimeout(() => {
+            let fadeOut = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.globalAlpha -= 0.05;
+                if (ctx.globalAlpha <= 0) {
+                    ctx.globalAlpha = 1;
+                    clearInterval(fadeOut);
+                    gameLoop();
+                } else {
+                    showAntivaxerImage();
+                }
+            }, 50);
+        }, 2000);
     });
 }
 
@@ -329,3 +352,5 @@ canvas.addEventListener('touchmove', (e) => {
 canvas.addEventListener('touchend', () => {
     keys.Space = true; // Shoot when touch ends
 });
+
+startGame();
