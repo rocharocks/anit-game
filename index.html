@@ -12,10 +12,18 @@
         canvas {
             display: block;
         }
+        .audio-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
+    <div id="audioButton" class="audio-button">🔇</div>
     <script>
         if (screen.orientation && screen.orientation.lock) {
             screen.orientation.lock('landscape');
